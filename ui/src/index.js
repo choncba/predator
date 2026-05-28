@@ -8,22 +8,15 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import './style.scss'
 import './globals.css'
-import { DragDropContextProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import 'font-awesome/css/font-awesome.min.css';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 ReactDOM.render(
-
   <Provider store={store}>
     <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-      <DragDropContextProvider backend={HTML5Backend}>
-
+      <DndProvider backend={HTML5Backend}>
         <App />
-      </DragDropContextProvider>
+      </DndProvider>
     </MuiThemeProvider>
   </Provider>
   , document.getElementById('root'));
-
-if (module.hot) {
-  module.hot.accept()
-}

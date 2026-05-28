@@ -1,0 +1,76 @@
+$header-color: #108ee9;
+$selected-bg: #108ee9;
+$selected-text: #fff;
+$border-grey: #e8e8e8;
+$stripe-bg: #fafafa;
+
+.tableWrapper {
+  margin-top: 10px;
+  background: white;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.thead {
+  color: var(--header-color, $header-color);
+  border-bottom: solid 1px $border-grey;
+}
+
+.th {
+  padding: 0.8rem 8px;
+  text-align: left;
+  font-weight: 600;
+  border-right: none;
+  outline: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.tbody {
+  overflow: visible;
+}
+
+.tr {
+  background: var(--background-default, #fff);
+  color: var(--text-default, #000);
+  border-bottom: solid 1px $border-grey;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(247, 247, 247, 0.8);
+  }
+
+  &.trStriped {
+    background: $stripe-bg;
+
+    &:hover {
+      background-color: rgba(240, 240, 240, 0.9);
+    }
+  }
+
+  &.trSelected {
+    background: var(--background-selected, $selected-bg) !important;
+    color: var(--text-selected, $selected-text) !important;
+
+    .td {
+      color: inherit;
+    }
+  }
+}
+
+.td {
+  padding: 8px;
+  border-right: none;
+  vertical-align: middle;
+}
+
+.noData {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}

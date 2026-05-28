@@ -2,9 +2,8 @@
 require('./env').init();
 const express = require('express');
 const audit = require('express-requests-logger');
-const bodyParser = require('body-parser');
 const path = require('path');
-const zip = require('express-easy-zip');
+const archiver = require('archiver');
 const fileUpload = require('express-fileupload');
 const contextMiddleware = require('./middlewares/context');
 
@@ -19,7 +18,7 @@ const processorsRouter = require('./processors/routes/processorsRoute.js');
 const filesRouter = require('./files/routes/filesRoute.js');
 const webhooksRouter = require('./webhooks/routes/webhooksRouter');
 const chaosExperimentsRouter = require('./chaos-experiments/routes/chaosExperimentsRoute');
-const swaggerValidator = require('express-ajv-swagger-validation');
+const swaggerValidator = require('openapi-validator-middleware');
 const database = require('./database/database');
 const jobsManager = require('./jobs/models/jobManager');
 const chaosExperimentsManager = require('./chaos-experiments/models/chaosExperimentsManager');
@@ -61,8 +60,8 @@ module.exports = async () => {
         res.sendFile(path.resolve('ui/dist/index.html'));
     });
 
-    app.use(bodyParser.json({ limit: process.env.BODY_PARSER_LIMIT || '512kb' }));
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.json({ limit: process.env.BODY_PARSER_LIMIT || '512kb' }));
+    app.use(express.urlencoded({ extended: true }));
 
     app.use(audit({
         logger: logger,
@@ -72,7 +71,23 @@ module.exports = async () => {
         }
     }));
 
-    app.use(zip());
+    // Zip middleware: adds res.zip(options) using archiver
+    app.use((req, res, next) => {
+        res.zip = function (options) {
+            const { files, filename } = options;
+            res.setHeader('Content-Type', 'application/zip');
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            const archive = archiver('zip', { zlib: { level: 9 } });
+            archive.pipe(res);
+            for (const file of files) {
+                if (file.type === 'file' && file.content) {
+                    archive.append(typeof file.content === 'string' ? file.content : JSON.stringify(file.content), { name: file.name });
+                }
+            }
+            archive.finalize();
+        };
+        next();
+    });
 
     app.use(contextMiddleware.middleware);
 

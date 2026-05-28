@@ -1,10 +1,12 @@
 const should = require('should');
-const JSCK = require('jsck');
+const Ajv = require('ajv');
+const addFormats = require('ajv-formats');
 const uuid = require('uuid');
 const nock = require('nock');
 const { cloneDeep } = require('lodash');
-JSCK.Draft4 = JSCK.draft4;
-const artilleryCheck = new JSCK.Draft4(require('artillery/core/lib/schemas/artillery_test_script'));
+const ajv = new Ajv({ allErrors: true, strict: false });
+addFormats(ajv);
+const artilleryCheck = ajv.compile(require('artillery/core/lib/schemas/artillery_test_script'));
 const testsRequestSender = require('./helpers/requestCreator');
 const processorsRequestSender = require('../processors/helpers/requestCreator');
 

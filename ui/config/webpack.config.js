@@ -7,39 +7,53 @@ const dotenv = require('dotenv').config({
 });
 
 module.exports = (webpackEnv) => {
-    Object.assign(process.env, webpackEnv, dotenv.parsed);
+    const envVars = typeof webpackEnv === 'object' ? webpackEnv : {};
+    Object.assign(process.env, envVars, dotenv.parsed);
     const env = require('../src/App/common/env');
     const entries = require('./entries');
     const rules = require('./rules');
 
     return {
+        mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
         entry: entries,
         output: {
-            publicPath: env.BUCKET_PATH,
-            path: path.join(__dirname, '/../dist'), // or path: path.join(__dirname, "dist/js"),
-            filename: process.env.NODE_ENV === 'production' ? 'bundle.[chunkhash:8].js' : 'bundle.js'
+            publicPath: env.BUCKET_PATH || '/',
+            path: path.join(__dirname, '/../dist'),
+            filename: process.env.NODE_ENV === 'production' ? 'bundle.[contenthash:8].js' : 'bundle.js',
+            clean: true
         },
         resolve: {
-            extensions: ['.js', '.jsx', '.ts', '.tsx']
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
+            fallback: {
+                // Polyfills for Node.js core modules if needed
+                "buffer": false,
+                "stream": false,
+                "path": false
+            }
         },
-        // Emit source maps so we can debug our code in the browser
         devtool: 'source-map',
-        // Tell webpack to run our source code through Babel
         module: {
             rules: rules
         },
-        // Since Webpack only understands JavaScript, we need to
-        // add a plugin to tell it how to handle html files.
         plugins: [
             new HtmlPlugin({
                 template: 'src/index.html',
                 favicon: 'src/images/favicon.png',
-                inject: true,
-                BUCKET_PATH: env.BUCKET_PATH || '/'
+                inject: true
             }),
-            new webpack.NamedModulesPlugin(),
-            new webpack.EnvironmentPlugin(['NODE_ENV', 'BUCKET_PATH', 'PREDATOR_URL', 'PREDATOR_DOCS_URL', 'VERSION']),
+            new webpack.EnvironmentPlugin({
+                NODE_ENV: 'development',
+                BUCKET_PATH: '/ui/',
+                PREDATOR_URL: '/v1',
+                PREDATOR_DOCS_URL: 'https://zooz.github.io/predator',
+                VERSION: 'dev'
+            }),
             new MonacoWebpackPlugin(),
-        ]
+        ],
+        devServer: {
+            hot: true,
+            historyApiFallback: true,
+            port: 8080
+        }
     };
 };

@@ -16,3 +16,6 @@ docs/.idea/workspace.xml
 .env
 *.sqlite
 ui/.env
+new-ui/dist/*
+new-ui/node_modules/*
+.kiro

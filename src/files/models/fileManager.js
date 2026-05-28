@@ -1,5 +1,5 @@
 'use strict';
-const uuid = require('uuid'),
+const { v4: uuid } = require('uuid'),
     { getContextId } = require('../../common/context/contextUtil');
 
 const database = require('./database'),

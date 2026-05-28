@@ -1,4 +1,4 @@
-const swaggerValidator = require('express-ajv-swagger-validation');
+const swaggerValidator = require('openapi-validator-middleware');
 const httpMethods = ['get', 'post', 'put', 'patch', 'delete'];
 module.exports = {
     createDslValidator

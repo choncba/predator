@@ -1,0 +1,47 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-top: 1px solid #e8e8e8;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.btnText {
+  cursor: not-allowed;
+  color: #ccc;
+  user-select: none;
+  padding: 4px 8px;
+
+  &.btnEnabled {
+    cursor: pointer;
+    color: #108ee9;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.pageInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+}
+
+.counter {
+  width: 40px;
+  height: 28px;
+  text-align: center;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+
+  &:focus {
+    border-color: #108ee9;
+    box-shadow: 0 0 0 2px rgba(16, 142, 233, 0.2);
+  }
+}

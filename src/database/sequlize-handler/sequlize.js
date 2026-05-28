@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const Umzug = require('umzug');
+const { Umzug, SequelizeStorage } = require('umzug');
 const schedulerSequlizeConnector = require('../../jobs/models/database/sequelize/sequelizeConnector');
 const reportsSequlizeConnector = require('../../reports/models/database/sequelize/sequelizeConnector');
 const testsSequlizeConnector = require('../../tests/models/database/sequelize/sequelizeConnector');
@@ -65,19 +65,20 @@ async function createClient() {
 
 async function runSequlizeMigrations() {
     const umzug = new Umzug({
-        storage: 'sequelize',
-
-        storageOptions: {
-            sequelize: sequlizeClient
-        },
-
         migrations: {
-            params: [
-                sequlizeClient.getQueryInterface(),
-                Sequelize
-            ],
-            path: path.join(__dirname, './migrations')
-        }
+            glob: path.join(__dirname, './migrations/*.js'),
+            resolve: ({ name, path: migrationPath }) => {
+                const migration = require(migrationPath);
+                return {
+                    name,
+                    up: async () => migration.up(sequlizeClient.getQueryInterface(), Sequelize),
+                    down: async () => migration.down(sequlizeClient.getQueryInterface(), Sequelize)
+                };
+            }
+        },
+        context: sequlizeClient.getQueryInterface(),
+        storage: new SequelizeStorage({ sequelize: sequlizeClient }),
+        logger: undefined
     });
 
     try {

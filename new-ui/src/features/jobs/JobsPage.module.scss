@@ -1,0 +1,24 @@
+@import '../../assets/styles/variables.scss';
+
+.pageActions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.actionIcon {
+  cursor: pointer;
+  color: $primary;
+  margin: 0 4px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.enabledCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

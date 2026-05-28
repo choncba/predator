@@ -1,19 +1,18 @@
 'use strict';
-const request = require('request-promise-native');
 
 module.exports = {
     downloadFile
 };
 
 async function downloadFile(fileUrl) {
-    const options = {
-        url: fileUrl
-    };
     try {
-        const response = await request.get(options);
-        return response;
+        const response = await fetch(fileUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return await response.text();
     } catch (err) {
-        const errMsg = 'Error to download file: ' + err;
+        const errMsg = 'Error to download file: ' + err.message;
         const error = new Error(errMsg);
         error.statusCode = 422;
         throw error;

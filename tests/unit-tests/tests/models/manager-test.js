@@ -6,7 +6,7 @@ const fileManager = require('../../../../src/files/models/fileManager');
 const sinon = require('sinon');
 const database = require('../../../../src/tests/models/database');
 const testGenerator = require('../../../../src/tests/models/testGenerator');
-const request = require('request-promise-native');
+const downloadManager = require('../../../../src/tests/models/downloadManager');
 const uuid = require('uuid');
 
 describe('Scenario generator tests', function () {
@@ -18,7 +18,7 @@ describe('Scenario generator tests', function () {
     let testGeneratorStub;
     let getTestRevisionsStub;
     let saveFileStub;
-    let getRequestStub;
+    let downloadFileStub;
     let insertBenchmarkStub;
     let getTestBenchmarkStub;
 
@@ -31,7 +31,7 @@ describe('Scenario generator tests', function () {
         getTestsStub = sandbox.stub(database, 'getTests');
         getTestRevisionsStub = sandbox.stub(database, 'getAllTestRevisions');
         deleteStub = sandbox.stub(database, 'deleteTest');
-        getRequestStub = sandbox.stub(request, 'get');
+        downloadFileStub = sandbox.stub(downloadManager, 'downloadFile');
         saveFileStub = sandbox.stub(fileManager, 'saveFile');
         testGeneratorStub = sandbox.stub(testGenerator, 'createTest');
     });
@@ -92,7 +92,7 @@ describe('Scenario generator tests', function () {
                 testjson: 'json'
             });
             insertStub.resolves();
-            getRequestStub.resolves('this is js code from dropbox');
+            downloadFileStub.resolves('this is js code from dropbox');
             saveFileStub.resolves('id');
 
             const result = await manager.upsertTest({
@@ -102,7 +102,7 @@ describe('Scenario generator tests', function () {
             insertStub.calledOnce.should.eql(true);
             saveFileStub.calledOnce.should.eql(true);
             should.notEqual(insertStub.getCall(0).args[4], undefined);
-            should(getRequestStub.getCall(0).args[0].url).eql('path to dropbox');
+            should(downloadFileStub.getCall(0).args[0]).eql('path to dropbox');
             result.should.have.keys('id', 'revision_id');
             Object.keys(result).length.should.eql(2);
         });
@@ -111,7 +111,7 @@ describe('Scenario generator tests', function () {
                 testjson: 'json'
             });
             insertStub.resolves();
-            getRequestStub.throws();
+            downloadFileStub.rejects(new Error('download failed'));
             saveFileStub.resolves();
             try {
                 const result = await manager.upsertTest({

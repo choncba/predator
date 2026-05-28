@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const uuid = require('uuid');
+const { v4: uuid } = require('uuid');
 const { WEBHOOK_EVENT_TYPES } = require('../../../common/consts');
 
 const tableName = 'webhooks';
