@@ -1,6 +1,6 @@
 'use strict';
 const { getContextId } = require('../../common/context/contextUtil'),
-    uuid = require('uuid');
+    { v4: uuid } = require('uuid');
 
 const testGenerator = require('./testGenerator'),
     database = require('./database'),
@@ -39,7 +39,7 @@ async function upsertTest(testRawData, existingTestId) {
         const downloadedFile = await downloadManager.downloadFile(testRawData.processor_file_url);
         processorFileId = await fileManager.saveFile('processor.js', downloadedFile);
     }
-    const revisionId = uuid.v4();
+    const revisionId = uuid();
     if (testRawData.type === TEST_TYPE_DSL) {
         testArtilleryJson = undefined;
     }

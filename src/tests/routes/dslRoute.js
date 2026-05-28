@@ -3,7 +3,7 @@
 const express = require('express'),
     router = express.Router(),
     dsl = require('../controllers/dslController'),
-    swaggerValidator = require('express-ajv-swagger-validation'),
+    swaggerValidator = require('openapi-validator-middleware'),
     customValidation = require('../middlewares/customValidation');
 
 router.post('/:dsl_name/definitions', swaggerValidator.validate, customValidation.createDslValidator, dsl.createDefinition);

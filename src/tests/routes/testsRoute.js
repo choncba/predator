@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const tests = require('../controllers/testsController');
-const swaggerValidator = require('express-ajv-swagger-validation');
+const swaggerValidator = require('openapi-validator-middleware');
 const artilleryValidator = require('../helpers/artilleryValidator');
 const testsVerifier = require('../helpers/testsVerifier');
 

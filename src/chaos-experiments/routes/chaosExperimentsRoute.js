@@ -1,6 +1,6 @@
 'use strict';
 
-const swaggerValidator = require('express-ajv-swagger-validation');
+const swaggerValidator = require('openapi-validator-middleware');
 const express = require('express');
 const router = express.Router();
 

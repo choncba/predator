@@ -1,0 +1,44 @@
+@import '../../assets/styles/variables.scss';
+
+.configurationPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  margin-top: 0;
+  color: #555555;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.cardWrapper {
+  padding: 16px;
+}
+
+.housekeepingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: $primary;
+  transition: color 0.2s;
+
+  &:hover {
+    color: darken($primary, 15%);
+  }
+}

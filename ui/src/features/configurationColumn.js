@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { get } from 'lodash';
 import Checkbox from '../components/Checkbox/Checkbox';
 
-import Moment from 'moment';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat);
 import prettySeconds from 'pretty-seconds';
-import 'font-awesome/css/font-awesome.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEye,
@@ -569,7 +570,7 @@ const dateFormatter = (cell, row) => {
     return 'Still running...';
   } else {
     return (
-      new Moment(cell).local().format('lll')
+      dayjs(cell).format('lll')
     );
   }
 };

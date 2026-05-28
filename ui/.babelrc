@@ -7,11 +7,9 @@
         "legacy": true
       }
     ],
-    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-class-properties",
     "@babel/plugin-transform-runtime",
-    "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-export-default-from",
-    "@babel/plugin-proposal-export-namespace-from"
+    "@babel/plugin-transform-export-namespace-from"
   ],
   "presets": [
     [
@@ -21,7 +19,13 @@
         "allExtensions": true
       }
     ],
-    "@babel/preset-env",
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ],
     "@babel/preset-react"
   ]
 }

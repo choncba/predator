@@ -1,0 +1,99 @@
+$drawer-width: 220px;
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.drawer {
+  width: $drawer-width;
+  flex-shrink: 0;
+}
+
+.drawerPaper {
+  width: $drawer-width;
+  background-image: linear-gradient(142deg, #00041a, #00126b);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  padding: 20px 0 0 18px;
+}
+
+.logoImage {
+  width: 40px;
+  height: auto;
+}
+
+.logoText {
+  font-weight: 700;
+  color: #ffffff;
+  font-family: Orbitron, sans-serif;
+  text-transform: lowercase;
+  margin: -4px 0 0 10px;
+  font-size: 1.4em;
+}
+
+.menuList {
+  margin-top: 45px;
+  padding-left: 9px;
+  width: 100%;
+}
+
+.menuItem {
+  color: white;
+  font-family: 'Bai Jamjuree', sans-serif;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.menuItemActive {
+  background-color: #242b57;
+
+  &:hover {
+    background-color: #242b57;
+  }
+}
+
+.menuIcon {
+  color: white;
+  font-size: 20px;
+  width: 24px;
+  margin-right: 12px;
+  text-align: center;
+}
+
+.menuText {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.bottomSection {
+  color: rgba(194, 194, 194, 0.56);
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 10px;
+  font-size: 0.8rem;
+}
+
+.content {
+  flex-grow: 1;
+  margin-left: 0;
+  padding: 24px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}

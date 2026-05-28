@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const filesController = require('../controllers/filesController');
-const swaggerValidator = require('express-ajv-swagger-validation');
+const swaggerValidator = require('openapi-validator-middleware');
 
 router.post('/', filesController.saveFile);
 router.get('/:file_id', swaggerValidator.validate, filesController.getFile);

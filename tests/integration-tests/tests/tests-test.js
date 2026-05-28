@@ -1,11 +1,13 @@
 const should = require('should');
 const validHeaders = { 'Content-Type': 'application/json' };
 const uuid = require('uuid');
-const JSCK = require('jsck');
+const Ajv = require('ajv');
+const addFormats = require('ajv-formats');
 const nock = require('nock');
 const { cloneDeep } = require('lodash');
-JSCK.Draft4 = JSCK.draft4;
-const artilleryCheck = new JSCK.Draft4(require('artillery/core/lib/schemas/artillery_test_script'));
+const ajv = new Ajv({ allErrors: true, strict: false });
+addFormats(ajv);
+const artilleryCheck = ajv.compile(require('artillery/core/lib/schemas/artillery_test_script'));
 const testsRequestSender = require('./helpers/requestCreator');
 const processorsRequestSender = require('../processors/helpers/requestCreator');
 const jobsRequestSender = require('../jobs/helpers/requestCreator');
@@ -531,6 +533,6 @@ describe('the tests api', function() {
 });
 
 function validate(script) {
-    const validation = artilleryCheck.validate(script);
-    return validation;
+    const valid = artilleryCheck(script);
+    return { valid, errors: artilleryCheck.errors || [] };
 }

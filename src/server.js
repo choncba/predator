@@ -1,6 +1,5 @@
 const app = require('./app'),
     logger = require('./common/logger'),
-    request = require('request-promise-native'),
     configHandler = require('./configManager/models/configHandler'),
     constConfig = require('./common/consts'),
     shutdown = require('graceful-shutdown-express');
@@ -38,11 +37,13 @@ async function verifyInternalAddressReachable() {
     }
 
     try {
-        await request.get(internalConfigAddress, {
-            json: true,
-            resolveWithFullResponse: true,
-            timeout: 5000
-        });
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const response = await fetch(internalConfigAddress, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
         logger.info(`${internalConfigAddress} successfully reached`);
     } catch (error) {
         let platform = await configHandler.getConfigValue(constConfig.CONFIG.JOB_PLATFORM);

@@ -1,68 +1,74 @@
 const rules = [
-        {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader']
+    {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+    },
+    {
+        test: /\.(js|ts)x?$/,
+        use: {
+            loader: 'babel-loader',
+            options: {
+                cacheDirectory: true
+            }
         },
-        {
-            test: /\.(js|ts)x?$/,
-            use: {
-                loader: 'babel-loader',
+        exclude: /node_modules/
+    },
+    {
+        test: /\.scss$/,
+        use: [
+            'style-loader',
+            {
+                loader: 'css-loader',
                 options: {
-                    cacheDirectory: true,
-                    plugins: ['react-hot-loader/babel']
+                    modules: {
+                        localIdentName: '[name]__[local]___[hash:base64:5]'
+                    },
+                    importLoaders: 1
                 }
             },
-            exclude:
-                /node_modules/
-        },
-        {
-            test: /\.scss$/,
-            use:
-                [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            import: true,
-                            localIdentName: '[name]__[local]___[hash:base64:5]'
-                        }
-                    },
-                    'sass-loader?sourceMap'
-                ]
-        },
-        {
-            test: /\.(png|jp(e*)g|svg)$/,
-            use:
-                [{
-                    loader: 'url-loader',
-                    options: {
-                        limit: 8000, // Convert images < 8kb to base64 strings
-                        name: 'images/[hash]-[name].[ext]'
+            {
+                loader: 'sass-loader',
+                options: {
+                    sassOptions: {
+                        silenceDeprecations: ['legacy-js-api', 'import']
                     }
-                }]
+                }
+            }
+        ]
+    },
+    {
+        test: /\.(png|jp(e*)g|svg|gif)$/,
+        type: 'asset',
+        parser: {
+            dataUrlCondition: {
+                maxSize: 8 * 1024 // 8kb
+            }
         },
-        {
-            test: /\.(eot|svg|ttf|woff|woff2)$/,
-            loader: 'file-loader?name=public/fonts/[name].[ext]'
-        },
+        generator: {
+            filename: 'images/[hash]-[name][ext]'
+        }
+    },
+    {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        type: 'asset/resource',
+        generator: {
+            filename: 'fonts/[hash][ext]'
+        }
+    },
     {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
         use: [
             {
-                loader: "ts-loader"
+                loader: 'ts-loader'
             }
         ]
     },
-    // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
     {
-        enforce: "pre",
+        enforce: 'pre',
         test: /\.js$/,
-        loader: "source-map-loader"
+        loader: 'source-map-loader'
     }
-
-    ]
-;
+];
 
 module.exports = rules;
